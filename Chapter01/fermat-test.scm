@@ -1,0 +1,16 @@
+#lang scheme
+(define (expmod base exp m)
+  (cond ((= exp 0) 1)
+        ((even? exp)
+         (remainder (square (expmod base (/ 2 exp) m)) m))
+        (else
+         (remainder (* base (expmod base (- exp 1) m)) m))))
+(define (square x) (* x x))
+(define (fermat-test n)
+  (define (try-it a)
+    (= (expmod a n n) a))
+  (try-it (+ 1 (random (- n 1)))))
+(define (fermat-prime? n times)
+  (cond ((= times 0) true)
+        ((fermat-test n) (fermat-prime? n (- times 1)))
+        (else false)))
